@@ -1,7 +1,11 @@
  <nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container-fluid"> 
-    <%= link_to "AlphaBlog", root_path, class: "navbar-brand", id: "logo"%>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <div class="container-fluid">
+    <%if logged_in %>
+        <%= link_to "AlphaBlog", articles_path, class: "navbar-brand", id: "logo"%>
+      <%else %>
+      <%= link_to "AlphaBlog", root_path, class: "navbar-brand", id: "logo"%>
+      <%end %>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -13,19 +17,44 @@
           </a>
           <ul class="dropdown-menu">
              <%= link_to "Articles List", articles_path, class: "dropdown-item"%>
+            <% if logged_in %>
             <%= link_to "New Article", new_article_path, class: "dropdown-item"%>
-          </ul>
+            <%end %>
+              </ul>
         </li>
+        <% if logged_in %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              User Options
+            </a>
+            <ul class="dropdown-menu">
+              <%= link_to "Edit Profile", edit_user_path(current_user), class: "dropdown-item"%>
+              <% if logged_in %>
+                <%= link_to "View Profile", user_path(current_user), class: "dropdown-item"%>
+              <%end %>
+            </ul>
+          </li>
+          <%end %>
         <li class="nav-item">
           <%=link_to "Blogger",users_path,class: 'nav-link' %>
 
         </li>
-        <li class="nav-item">
-          <%=link_to "Login",login_path,class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%=link_to "Logout",logout_path,class: 'nav-link',method: :delete %>
-        </li>
+
+        <% if logged_in %>
+          <li class="nav-item">
+            <%=link_to "Logout",logout_path,class: 'nav-link',method: :delete %>
+          </li>
+          <li class="nav-item">
+            <%=link_to current_user.username,user_path(current_user),class: 'nav-link',method: :delete %>
+          </li>
+          <%else %>>
+          <li class="nav-item">
+            <%=link_to "Login",login_path,class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%=link_to "Sign Up",signup_path,class: 'nav-link' %>
+          </li>
+          <%end %>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
